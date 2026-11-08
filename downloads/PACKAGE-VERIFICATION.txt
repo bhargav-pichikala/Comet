@@ -1,0 +1,17 @@
+Package verification — 2026-11-08
+Self-contained Windows x64 release; native execution NOT VERIFIED.
+Core tests: 53 passed, 0 failed.
+Windows smoke harness: cross-build passed; execution NOT VERIFIED.
+Comet.exe: PE x86-64.
+Runtime configuration: [{"name": "Microsoft.NETCore.App", "version": "8.0.33"}, {"name": "Microsoft.WindowsDesktop.App", "version": "8.0.33"}]
+
+Comet-source.zip
+Bytes: 176765
+SHA256: 113f1fc1b0ba6ed459eef499ed2fd62e38baf0c4ac38964c6c9fce94c865ccf9
+ZIP integrity: passed (49 entries)
+
+Comet-win-x64.zip
+Bytes: 69950735
+SHA256: 1fdbb91879e7f15f6a8a2c20a2eaec758cfe7b29d5f19b09b00f496b168a1c15
+ZIP integrity: passed (490 entries)
+
