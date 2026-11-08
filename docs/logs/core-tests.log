@@ -1,0 +1,56 @@
+Dataset: 3949 entries; index construction 187 ms
+PASS Parser recognizes a shortcode
+PASS Ordinary text never buffered
+PASS Trigger requires word boundary
+PASS Whitespace permits trigger
+PASS Opening punctuation permits trigger
+PASS Custom trigger
+PASS Double trigger
+PASS Incomplete double trigger has no query
+PASS Backspace edits candidate
+PASS Backspace removes trigger
+PASS Movement reset invalidates revision
+PASS Whitespace cancels candidate
+PASS Non-ASCII typing cancels candidate
+PASS Candidate length is bounded
+PASS Rapid repeated shortcode parsing
+PASS Exact emoji search
+PASS Partial emoji search
+PASS Case insensitive search
+PASS Fuzzy edit distance
+PASS Fuzzy can be disabled
+PASS Aliases match
+PASS Dataset has gender and ZWJ sequences
+PASS Dataset has variation selectors
+PASS Tone preference selects variation
+PASS Custom emoji takes precedence
+PASS Multiline snippet expansion
+PASS Duplicate shortcuts rejected ignoring case
+PASS Invalid shortcut rejected
+PASS Empty snippet rejected
+PASS Unsafe replacement candidate rejected
+PASS Replacement preserves surrounding text
+PASS ZWJ replacement preserves UTF16 sequence
+PASS Replacement requires a query
+PASS Replacement caret bounds
+PASS Keyboard navigation wraps
+PASS Executable exclusions exact match
+PASS Exclusion normalization
+PASS Settings roundtrip preserves Unicode and newlines
+PASS Corrupt settings rejected
+PASS Unknown settings version rejected
+PASS Invalid trigger rejected
+PASS Invalid popup count rejected
+PASS Recent items capped and deduplicated
+PASS Favorites filter
+PASS Recent ordering
+PASS Category filter
+PASS Search cache invalidation
+PASS Random surrounding text is preserved
+PASS Win32 INPUT x64 ABI layout
+PASS Win32 GUI thread info x64 ABI layout
+PASS Snippet variable deterministic expansion
+PASS Unknown snippet variables preserved
+PASS Snippet ISO timestamp retains offset
+Uncached search: median 1.02 ms, max 10.03 ms. Process working set 97 MB (Linux test runner, not Windows app).
+RESULT 53 passed, 0 failed

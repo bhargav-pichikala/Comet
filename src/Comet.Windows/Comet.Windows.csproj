@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms><EnableWindowsTargeting>true</EnableWindowsTargeting><ImplicitUsings>disable</ImplicitUsings><Nullable>enable</Nullable><ApplicationManifest>app.manifest</ApplicationManifest><ApplicationIcon>comet.ico</ApplicationIcon><AssemblyName>Comet</AssemblyName><Version>0.1.0</Version><PublishTrimmed>false</PublishTrimmed></PropertyGroup>
+<ItemGroup><ProjectReference Include="../Comet.Core/Comet.Core.csproj"/><Resource Include="comet.ico"/></ItemGroup>
+</Project>

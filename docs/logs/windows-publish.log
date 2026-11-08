@@ -1,0 +1,6 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Comet.Core -> /workspace/work/Comet/src/Comet.Core/bin/Release/net8.0/Comet.Core.dll
+CSC : warning WFAC010: Remove high DPI settings from /workspace/work/Comet/src/Comet.Windows/app.manifest and configure via Application.SetHighDpiMode API or 'ApplicationHighDpiMode' project property [/workspace/work/Comet/src/Comet.Windows/Comet.Windows.csproj]
+  Comet.Windows -> /workspace/work/Comet/src/Comet.Windows/bin/Release/net8.0-windows/win-x64/Comet.dll
+  Comet.Windows -> /workspace/work/publish/

@@ -1,0 +1,5 @@
+Source: https://github.com/iamcal/emoji-data/blob/master/emoji.json
+Fetched: 2026-11-08
+SHA256 source: 8736d721991e48c41c57acc46b65e5d32258a45e4bcdebcc6012f420f81e775d
+Entries including tone variants: 3949
+License: MIT. No image assets used. Rendered with Windows emoji font.
