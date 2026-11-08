@@ -9,6 +9,7 @@ public sealed class EmojiSearchEngine
     readonly string[][] terms;
     readonly HashSet<(string, int)> variants;
     readonly Dictionary<string, IReadOnlyList<Suggestion>> cache = new();
+    Settings? cacheOwner;
     public EmojiSearchEngine()
     {
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Comet.Core.emoji.json")!;
@@ -35,13 +36,14 @@ public sealed class EmojiSearchEngine
     public void Invalidate() => cache.Clear();
     public IReadOnlyList<Suggestion> Search(string query, Settings s, int limit = 7, string category = "All")
     {
+        if(!ReferenceEquals(cacheOwner,s)){cache.Clear();cacheOwner=s;}
         var q = Norm(query); var key = $"{q}|{limit}|{category}|{s.SkinTone}|{s.Fuzzy}";
         if (cache.TryGetValue(key, out var cached)) return cached;
         var found = new Dictionary<string, (Suggestion Item, int Score)>();
         foreach (var ex in s.Expansions)
         {
             int score = Score(Norm(ex.Shortcut), q, s.Fuzzy);
-            if (q.Length == 0 || score > 0) found["custom:" + ex.Shortcut] = (new("custom:" + ex.Shortcut, ex.Shortcut, ex.Text, ex.Kind, ex.Shortcut), score + 30);
+            if (q.Length == 0 || score > 0) found["custom:" + ex.Shortcut] = (new("custom:" + ex.Shortcut, ex.Shortcut, ex.Text, ex.Kind, ex.Shortcut), score + (Norm(ex.Shortcut)==q ? 100 : 20));
         }
         var ids = new HashSet<int>();
         if (q.Length == 0) ids.UnionWith(Enumerable.Range(0, Emojis.Count));
@@ -61,6 +63,8 @@ public sealed class EmojiSearchEngine
             if (s.SkinTone != e.Tone && !(e.Tone == 0 && !variants.Contains((e.Id, s.SkinTone)))) continue;
             int score = q.Length == 0 ? 1 : terms[i].Max(t => Score(t, q, s.Fuzzy));
             if (score <= 0) continue;
+            // An exact shortcode must beat unrelated emoji that merely share a keyword (e.g. heart).
+            if(q.Length>0 && e.Aliases.Any(a=>Norm(a)==q))score+=60;
             score += Math.Min(s.Frequency.GetValueOrDefault(e.Id), 15) + (s.Favorites.Contains(e.Id) ? 8 : 0);
             if (category == "Recent") score += 100 - s.Recent.IndexOf(e.Id);
             if (category == "Frequent") score += s.Frequency.GetValueOrDefault(e.Id);

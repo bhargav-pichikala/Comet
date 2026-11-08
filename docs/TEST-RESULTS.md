@@ -1,39 +1,36 @@
-# Actual build and test results
+# Comet 0.2 — actual test results
 
-Date: 2026-11-08. Environment: Debian GNU/Linux 13 x86-64. SDK: .NET 8.0.427. Windows runtime dependencies in publish: .NET and WindowsDesktop 8.0.33.
+2026-11-08 · Debian Linux x86-64 · .NET SDK 8.0.427 · Windows runtime dependencies 8.0.33.
 
-## Executed successfully
+## Executed
 
-| Check | Actual outcome |
-|---|---|
-| DMG extraction | 7-Zip 25.01 extracted the UDIF/HFS+ bundle successfully |
-| Static identification | Plist, JSON, localization, SQL, strings, universal Mach-O headers/load commands read |
-| Portable automated suite | **53 passed, 0 failed** |
-| Windows x64 self-contained publish | Succeeded; Windows PE x86-64 Comet.exe generated |
-| Optional Windows smoke harness cross-build | Succeeded, 0 warnings / 0 errors; not executed |
-| Native interop structure layout | INPUT=40, KEYBDINPUT=24, GUITHREADINFO=72 bytes on x64; portable assertions passed |
-| Runtime inclusion | Runtime config declares included .NETCore.App and WindowsDesktop.App 8.0.33; hostfxr.dll, coreclr.dll, PresentationFramework.dll and Windows Forms assembly present |
+- **84 portable tests passed, 0 failed**, including the original 53 tests.
+- **100 consecutive rocket/heart/fire cycles** passed in shared production session/search/replacement-planning logic, without restarting or resetting the simulated field. Own-tagged synthetic-input filtering and physical confirm key-up are exercised in each cycle.
+- **100 cancellation/failure-completion cycles** and **100 rapid popup fade/reopen state cycles** passed.
+- Regression coverage also includes full-Backspace rearming, stale search/visibility/completion rejection, newer-query preservation, invisible-selection protection, Search for more navigation/context, exact heart/custom alias priority, settings-cache isolation and physical-pixel placement at bottom/right edges, negative-coordinate monitors and 100/125/150/200% scales.
+- Self-contained Windows x64 app publish succeeded. PE x64 apphost and included runtime files were inspected.
+- Self-contained Windows smoke runner publish succeeded. It includes 100 actual synthetic-input/insertion cycles when run on Windows; **it was not executed here**.
+- Whitespace/diff checks passed. Archives are checked for integrity and per-file hashes, and original 0.1 ZIP hashes are checked unchanged.
 
-The app publish emits **WFAC010**, advising use of Windows Forms DPI APIs instead of manifest DPI declarations. Comet's UI is WPF; the per-monitor manifest is intentional and Windows Forms is used for the tray. This is a build warning, not a native DPI validation pass.
+The final portable run observed median uncached search 0.90 ms and maximum 3.65 ms over ten representative queries, with a 154 MB Linux test-runner working set. These are not Windows idle resource or hook-latency measurements.
 
-The final portable run indexed 3,949 emoji entries in 187 ms. Across ten uncached representative queries, median search time was 1.02 ms and maximum 10.03 ms. The Linux console process working set was 97 MB. These numbers include test-process/JIT/index effects and are not Windows idle-memory/CPU/hook-latency measurements. Search figures are observations, not enforced performance guarantees.
+The new repeated-cycle regression initially failed at its second cycle: `heart` could rank a different heart emoji before the explicit ❤️ alias. The ranking defect was fixed and the full suite rerun. Fully erasing a candidate also exposed a reproducible boundary rearming defect; its exact sequence is covered. See BUG-INVESTIGATION-0.2.md for distinctions from the unverified native one-use report.
 
-The suite covers word boundaries, single/double/custom triggers, Backspace, cancellation revisions, rapid parser updates and candidate bounds; exact/partial/case-insensitive/alias/fuzzy search; tone/gender/ZWJ/selectors; custom alias priority and duplicates; multiline snippets and date/time variables; surrounding-text replacement planning and randomized context; settings validation/roundtrip/corruption/version checks; keyboard navigation; exclusions; usage/favorites/recents/categories/cache invalidation; and Win32 structure layouts. Portable tests do not call Windows APIs or prove native hooks/insertion.
+The publish has one intentional WFAC010 analyzer warning about manifest DPI settings: WPF owns the UI; Windows Forms supplies only the tray. Keeping the per-monitor manifest is not proof that native DPI behavior passed.
 
-## Attempted but unavailable
+## Not executed / not verified
 
-Executing the published Windows EXE on Linux returned:
+No native Windows launch, tray, hook delivery/suppression, physical input, caret/provider/DPI placement, focus continuity, real-app replacement, startup, UI persistence/restart, Desktop copy, native screenshot export or clean-exit pass is claimed. No 100-cycle native test pass is claimed. No source macOS runtime was executed. A headless Linux Chromium design-sheet render was attempted but produced no screenshot; the design HTML is labeled accordingly. Windows executable launch on Linux is unsupported and reports Exec format error.
 
-```text
-cannot execute binary file: Exec format error
-```
+The shared code regressions demonstrate state/planning behavior. They do not establish the precise cause of the user's native failure or replace the pending native checklist in WINDOWS-VALIDATION.md.
 
-No Windows runtime or Wine is available. Therefore actual native launch, tray, global hook input, popup location, focus behavior, Unicode insertion, clipboard attachments, startup, settings UI, exit, Windows password-field behavior, real keyboard layouts and application compatibility are **NOT VERIFIED**. The synthetic Windows harness is compiled only and has no pass count here. The checklist in WINDOWS-VALIDATION.md is pending in its entirety.
+## Evidence
 
-## Included evidence
+- `logs/core-tests-0.2.log`
+- `logs/baseline-regressions-0.1.log`
+- `logs/windows-publish-0.2.log`
+- `logs/windows-smoke-publish-0.2.log`
+- `logs/windows-launch-0.2.log`
+- `../downloads/Comet-0.2-SHA256SUMS.txt` and packaged `SHA256SUMS.txt`
 
-`logs/core-tests.log`, `logs/windows-publish.log`, `logs/windows-smoke-build.log`, and `logs/windows-launch-attempt.log` preserve command outputs. PE/dependency/hash/archive verification is recorded in `PACKAGE-VERIFICATION.txt` alongside the output archives.
-
-## Delivery-path limitation
-
-The specified chat artifact folder under `/codex/browser/projectless/.../output` could not be created: the filesystem denied creation of `/codex`, and `sudo` is not installed. The completed archives and readable reports are saved in `/workspace/output`. No successful export to the designated chat download folder is claimed.
+The Windows binary package includes the test runner and `Run-Windows-Tests.cmd`; no SDK is needed to perform those synthetic tests locally. Its log is `%TEMP%\Comet-Windows-smoke-results.txt`.

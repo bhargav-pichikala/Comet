@@ -1,58 +1,47 @@
-# Comet for Windows · 0.1
+# Comet for Windows · 0.2
 
-Independent native Windows emoji autocomplete utility, implemented in original C#/.NET 8 WPF code after static inspection of the supplied Rocket macOS disk image. **Built for Windows x64; Windows execution and application compatibility remain unverified. This is not a production-ready or feature-complete Rocket replacement.**
+Native .NET 8 WPF emoji autocomplete, updated with repeated-session lifecycle fixes, caret-based positioning and a compact Rocket-style popup based on the supplied screenshot. This is original code and artwork using independently MIT-licensed emoji metadata.
 
-## Run
+**Windows x64 binaries are cross-built on Linux. Native Windows behavior and the user's original one-use failure remain unverified here. Do not treat this as a production-validated or feature-complete release.** See [the investigation](docs/BUG-INVESTIGATION-0.2.md), [changes](docs/CHANGELOG-0.2.md), [actual test results](docs/TEST-RESULTS.md) and [validation checklist](docs/WINDOWS-VALIDATION.md).
 
-1. Extract the **entire** `Comet-win-x64.zip` into a permanent writable folder on Windows 10/11 x64. Keep the EXE and all dependencies together.
-2. Run `Comet.exe`. Development tools and a separately installed .NET runtime are not required. The first launch opens Settings. Thereafter, Comet lives in the system tray (possibly under the hidden-icons arrow).
-3. In an accessible standard text editor, type `:rocket`, wait for suggestions, then press Enter or Tab. Use Up/Down to choose and Escape to dismiss. The default minimum is two letters. A shortcode must begin at a boundary, such as after a space or opening parenthesis.
-4. Press **Ctrl+Shift+Space** for the full picker, or open it from the tray. Enter/double-click inserts into the preceding supported field; Copy is available when insertion is unsupported. Right-click or use Favorite to save an item.
-5. Open Settings from the tray to add custom emoji shortcuts and multiline snippets, change the trigger, exclusions, popup size, hotkey, appearance, or startup behavior. Click **Save** to apply settings. Expansions use names without the trigger, such as `signature`.
+## Download and run
 
-A closed Settings or picker window does not exit Comet. Choose **Quit Comet** from the tray.
+Use `downloads/Comet-0.2-win-x64.zip` for this version. The original `Comet-win-x64.zip` remains the preserved 0.1 build. Extract the entire ZIP into a new folder, quit any running old Comet from its tray, then run `Comet.exe` inside the extracted Comet folder. Keep all runtime files together. No Visual Studio, SDK or separate .NET runtime is needed to run either Comet or its bundled Windows smoke runner.
 
-If Windows displays a warning for this unsigned application, review the source/build provenance before deciding whether to run it. The binary is not code-signed.
+Type `:rocket`, choose with Up/Down, then Enter or Tab. Escape cancels. The default minimum is two letters. A fully backspaced candidate can immediately be retried. After insertion, the next shortcode can begin without a restart. That state behavior is regression-tested; actual cross-application hook/insertion behavior needs the Windows tests below.
 
-## Optional installation
+The compact popup shows the current query, one-line emoji suggestions, and **Search for more…**. Select that footer to open the full picker with the query already entered. Picker insertion verifies/replaces the original candidate when opened from autocomplete. The popup stays nonactivating. It tries actual Win32 caret geometry, UI Automation collapsed selection geometry and the MSAA caret object. If none is reliable, inline suggestions stay hidden and Enter is not intercepted for an invisible selection; use **Ctrl+Shift+Space** to open the picker and Copy if needed.
 
-The ZIP is portable. The included `install.ps1` optionally copies it to `%LOCALAPPDATA%\Programs\Comet` and creates a Start menu shortcut. Run that script from the extracted binary folder using PowerShell. It requires no administrator access. Quit Comet before upgrading. Enable launch at sign-in in Settings **after** moving/installing the app, so the registered path points to its permanent location.
+Tray controls provide picker, settings, GIF library, pause/resume, input diagnostics and Quit. Closing a regular window leaves the tray app running. Settings retains custom aliases, multiline/date-time snippets, favorites, recent/frequent emoji, skin tone, exclusions, appearance, hotkey choices, import/export and opt-in startup. GIFs are an authorized local-file library with animation and attachment copying, not an online service.
 
-`uninstall.ps1` removes that per-user installation, its Start menu shortcut, and its startup entry, while retaining personal data. Both scripts are supplied but could not be executed in the Linux build environment. To remove personal data too, delete `%LOCALAPPDATA%\Comet` after quitting, if desired.
+## Copy to your Windows Desktop with backup
 
-## GIFs
+After extracting into a temporary/new folder and quitting Comet, you may explicitly run `Install-To-Desktop.ps1` from that binary folder. It finds the actual Windows Desktop (including a redirected Desktop), backs up an existing `Comet-Windows` folder to a timestamped sibling, and writes the full build, README.txt, TEST_RESULTS.md, KNOWN_LIMITATIONS.md and a ZIP under `Desktop\Comet-Windows`. It never installs an SDK or requires administrator access. This helper is supplied but has not been executed on Windows here.
 
-Open **GIF library**, add GIF files you own or may lawfully share, search their filenames, preview animation, and choose **Copy GIF file**. Paste into a destination that accepts file attachments. There is no online GIF provider, GIF shortcode expansion, or bundled proprietary reaction library. Sharing support depends on the destination. Removed library entries leave the managed GIF files intact so copied attachments and exported settings do not unexpectedly break.
+Alternatively, use File Explorer to rename the old Desktop folder as a backup, create `Comet-Windows`, and extract/copy the entire new Comet folder's contents there. If startup is enabled, save Settings after launching the copy in its permanent location so the startup path is updated.
 
-## Input and privacy limits
+## Actual Windows tests and screenshot
 
-Autocomplete only operates when Windows accessibility identifies a focused, enabled, non-password editable field. Unknown/inaccessible fields, active IMEs, excluded applications, and stale privacy checks disable processing. Before deletion, Comet verifies an empty selection and the exact preceding shortcode via `TextPattern`. If unavailable or timed out, it cancels replacement and reports the reason. The picker can insert without deletion into a supported field, or copy explicitly.
+Quit normal Comet and double-click `Run-Windows-Tests.cmd`. The explicit `--test-input` mode lets the separate bundled smoke runner send synthetic US-layout keys. Click its Run button, keep keyboard/mouse untouched, and wait for **100 consecutive rocket/heart/fire cycles**, plus cancellation/privacy cases. It writes `%TEMP%\Comet-Windows-smoke-results.txt`. Quit test-mode Comet and relaunch normally afterward. This test is compiled, not executed in the Linux build environment. Physical input, other editors, caret placement and focus still require the manual matrix in docs/WINDOWS-VALIDATION.md.
 
-Only a bounded ASCII shortcode candidate is buffered while active; ordinary text is not retained. The accessibility verification reads only the bounded preceding candidate range, not a whole document or field value. No typed-text logs, network traffic, analytics, or telemetry are implemented. Settings store user-created snippets, usage IDs/counts, favorites, exclusions, and managed GIF paths locally. Treat exported settings as private.
+For a real WPF design capture on your Windows PC, run `.\Comet.exe --popup-preview`. It saves `Comet-popup-preview.png` beside the executable. This preview does not install hooks or test caret positioning. The HTML design sheet in docs/visual is labeled as a design reference, not a WPF screenshot. No native screenshot was fabricated.
 
-Multiline snippets send Enter key events. Use them in multiline editors: in chat apps Enter can send a message. Surrogate pairs, variation selectors, and ZWJ sequences are preserved as UTF-16 Unicode input. Applications decide how they render and accept them.
+## Privacy and input limits
 
-See `docs/KNOWN-LIMITATIONS.md` and `docs/WINDOWS-VALIDATION.md` before depending on it.
+Only an in-memory bounded ASCII shortcode candidate is retained. No general typing log, clipboard history, network telemetry or HTTP API exists in the app. Settings are local plaintext in `%LOCALAPPDATA%\Comet\settings.json` and may contain private user snippets. Export them accordingly.
 
-## Build and tests
+Unknown/password/excluded fields, stale checks, changed focus and detected open IMEs disable processing. Before replacing, Comet verifies the exact bounded preceding candidate and empty selection through UIA TextPattern, then rechecks context before one Unicode SendInput batch. It does not read whole documents or full field values. Unsupported providers fail closed, and protected/elevated/remote fields are not bypassed. A narrow cross-process edit race remains; no universal compatibility claim is made. Multiline snippets send Enter keys and can send messages in chat apps; use them in multiline editors.
 
-Install the .NET 8 SDK (8.0.427 used here), then run from the source root:
+## Build and source layout
+
+.NET SDK 8.0.427 was used. From this source root:
 
 ```powershell
 dotnet run --project tests/Comet.Tests -c Release
 dotnet publish src/Comet.Windows -c Release -r win-x64 --self-contained true -o artifacts/Comet-win-x64
+dotnet publish tests/Comet.WindowsSmoke -c Release -r win-x64 --self-contained true -o artifacts/WindowsSmoke
 ```
 
-Or run `tools/build.ps1` on Windows to test, publish, and ZIP. Linux can cross-build the WPF app with `EnableWindowsTargeting=true`, as set in the project. A normal `dotnet build` on Linux creates a Linux apphost that cannot run WPF: distribute only the **win-x64 publish** output.
+The core suite exercises production session state, parsing, ranking, settings, replacement planning, navigation, injection filtering and physical-pixel placement geometry. It does not execute Windows APIs. See docs/logs for actual command outputs. The Windows publish is self-contained; do not distribute only the EXE or a Linux apphost.
 
-For an interactive synthetic Windows input smoke test, build `tests/Comet.WindowsSmoke` and follow `docs/WINDOWS-VALIDATION.md`. Do not treat successful compilation as proof of native behavior.
-
-## Contents
-
-- `src/Comet.Core`: parser, indexed search, Unicode emoji metadata, models, replacement plans, settings.
-- `src/Comet.Windows`: tray host, Win32 keyboard/mouse hooks, accessibility guard, exact-range verification, SendInput insertion, popup, picker, settings and GIF library.
-- `tests/Comet.Tests`: portable automated tests.
-- `tests/Comet.WindowsSmoke`: opt-in interactive Windows integration harness.
-- `docs`: static DMG findings, architecture, parity audit, actual test results, limitations and validation checklist.
-
-Metadata uses MIT-licensed `iamcal/emoji-data`; see license and provenance in `docs`. No Rocket binaries, databases, artwork, GIFs, or licensing components are redistributed. The icon is original geometric artwork.
+`src/Comet.Core` contains portable logic and embedded metadata. `src/Comet.Windows` contains the input pump, privacy/caret workers, Win32 insertion, tray and WPF windows. `tests/Comet.WindowsSmoke` is the explicit native integration harness. `docs` includes findings, architecture, parity, investigation, visual comparison and validation. Runtime licenses and emoji metadata provenance are included. No Rocket binary, database, artwork, GIF pack, font or licensing code is redistributed.

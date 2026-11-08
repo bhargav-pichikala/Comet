@@ -1,0 +1,2 @@
+88467a19d521caa58e2a096ec32f6d3e67e9a41ae3991eb5aa1fbf39becc803a  Comet-0.2-win-x64.zip
+674ea2bbcba97ba5fca836cb9ef7c01ebb2676d80fe04cb7c8acca355fed715c  Comet-0.2-source.zip

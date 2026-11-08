@@ -8,9 +8,10 @@ internal sealed class PickerWindow : Window
     readonly ListBox list=new(){BorderThickness=new Thickness(0),Background=Brushes.Transparent};
     readonly TextBlock count=Ui.Label("",12,Ui.Muted);
     readonly nint target;
-    internal PickerWindow(AppHost host,nint target)
+    readonly PickerReplacement? replacement;
+    internal PickerWindow(AppHost host,nint target,string initialQuery="",PickerReplacement? replacement=null)
     {
-        this.host=host;this.target=target;Title="Comet · Emoji picker";Width=760;Height=650;MinWidth=520;MinHeight=400;Ui.Window(this);list.Foreground=Ui.Fg;
+        this.host=host;this.target=target;this.replacement=replacement;Title="Comet · Emoji picker";Width=760;Height=650;MinWidth=520;MinHeight=400;Ui.Window(this);list.Foreground=Ui.Fg;
         search.ToolTip="Search emoji names, shortcodes, and keywords";search.Margin=new Thickness(0,12,0,12);
         categories.ItemsSource=new[]{"All","Recent","Frequent","Favorites","Emoji","Snippet"}.Concat(host.Search.Emojis.Select(e=>e.Category).Distinct()).ToArray();categories.SelectedIndex=0;categories.Width=230;
         tones.ItemsSource=new[]{"Default skin tone","Light","Medium-light","Medium","Medium-dark","Dark"};tones.SelectedIndex=host.Settings.SkinTone;tones.Width=180;
@@ -21,7 +22,7 @@ internal sealed class PickerWindow : Window
         search.TextChanged+=(_,_)=>Refresh();categories.SelectionChanged+=(_,_)=>Refresh();tones.SelectionChanged+=(_,_)=>{host.Settings.SkinTone=tones.SelectedIndex;host.Search.Invalidate();host.Save();Refresh();};
         list.MouseDoubleClick+=(_,_)=>Insert();list.MouseRightButtonUp+=(_,_)=>Favorite();
         PreviewKeyDown+=(_,e)=>{if(e.Key==Key.Escape)Close();if(e.Key==Key.Enter){Insert();e.Handled=true;}if(e.Key==Key.Down && search.IsKeyboardFocusWithin){list.Focus();if(list.SelectedIndex<0)list.SelectedIndex=0;e.Handled=true;}};
-        Loaded+=(_,_)=>search.Focus();Refresh();
+        search.Text=initialQuery;Loaded+=(_,_)=>search.Focus();Refresh();
     }
     void Refresh()
     {
@@ -36,7 +37,7 @@ internal sealed class PickerWindow : Window
         if(list.Items.Count>0)list.SelectedIndex=0;count.Text=$"{items.Count} results"+(items.Count==400?" · refine search to see more":"");
     }
     Suggestion? Selected => (list.SelectedItem as ListBoxItem)?.Tag as Suggestion;
-    void Insert() { if(Selected is {} item){Close();host.InsertFromPicker(item,target);} }
-    void Copy() { if(Selected is {} item){host.Copy(item.Text);host.Used(item.Id);count.Text="Copied to clipboard";} }
+    void Insert() { if(Selected is {} item){Close();host.InsertFromPicker(item,target,replacement);} }
+    void Copy() { if(Selected is {} item){host.Copy(item.Category=="Snippet"?SnippetExpander.Expand(item.Text,DateTimeOffset.Now):item.Text);host.Used(item.Id);count.Text="Copied to clipboard";} }
     void Favorite() { if(Selected is {} item){if(!host.Settings.Favorites.Add(item.Id))host.Settings.Favorites.Remove(item.Id);host.Search.Invalidate();host.Save();Refresh();} }
 }

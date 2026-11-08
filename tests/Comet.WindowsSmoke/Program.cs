@@ -37,13 +37,30 @@ static class Program
             {
                 var layout=Native.GetKeyboardLayout(0).ToInt64()&0xffff;if(layout!=0x409)throw new Exception("Select English (United States) keyboard layout before this test.");
                 await Prepare();await Type(":rocket");await Task.Delay(350);Press(13);await Task.Delay(800);Result("Shortcut replaced with rocket",input.Text=="🚀");
+                await Prepare();string expected="";string[] names=["rocket","heart","fire"];string[] emoji=["🚀","❤️","🔥"];
+                for(int cycle=0;cycle<100;cycle++)
+                {
+                    await Type(":"+names[cycle%3]);await Task.Delay(350);Press(13);await Task.Delay(650);
+                    expected+=emoji[cycle%3];Result($"Repeated insertion {cycle+1}/100",input.Text==expected);
+                    if(input.Text!=expected)throw new Exception("Repeated insertion stopped at cycle "+(cycle+1)+". Open Comet tray → Input diagnostics and record the counters.");
+                    // Deliberately do not reset the field or restart the application between cycles.
+                }
+                await Prepare();await Type(":rocket");await Task.Delay(350);
+                for(int repeat=0;repeat<5;repeat++)Send(13);Send(13,true);await Task.Delay(800);
+                Result("Confirm autorepeats insert exactly once",input.Text=="🚀");
                 await Prepare("before ");await Type(":rocket");await Task.Delay(350);Press(13);await Task.Delay(800);Result("Surrounding text preserved",input.Text=="before 🚀");
                 await Prepare();await Type(":rocket");await Task.Delay(350);Press(27);await Task.Delay(100);await Type("x");Result("Escape dismisses and preserves candidate",input.Text==":rocketx");
                 await Prepare();await Type(":rocket");await Task.Delay(350);Press(8);await Task.Delay(200);Press(13);await Task.Delay(800);Result("Backspace updates and replacement remains correct",input.Text=="🚀");
+                await Prepare();await Type(":rocket");await Task.Delay(350);
+                var outside=window.PointToScreen(new Point(25,25));Native.SetCursorPos((int)outside.X,(int)outside.Y);
+                var clicks=new[]{new Native.Input{Type=0,Data=new(){Mouse=new(){Flags=2}}},new Native.Input{Type=0,Data=new(){Mouse=new(){Flags=4}}}};
+                Native.SendInput(2,clicks,Marshal.SizeOf<Native.Input>());await Task.Delay(150);input.Focus();Press(13);await Task.Delay(500);
+                Result("Click outside cancels replacement",input.Text.Contains(":rocket") && !input.Text.Contains("🚀"));
                 password.Clear();password.Focus();Keyboard.Focus(password);await Task.Delay(900);await Type(":rocket");Press(13);await Task.Delay(300);Result("Password field is untouched",password.Password==":rocket");password.Clear();
                 await Prepare();await Type(":rocket");await Task.Delay(350);Press(0x25);Press(13);await Task.Delay(300);Result("Cursor movement cancels replacement",input.Text.Contains(":rocke"));
             }
             catch(Exception e){log.AppendText("BLOCKED "+e.Message+Environment.NewLine);failed++;}
+            log.AppendText("Popup appearance/caret position and focus continuity still need the manual visual checks in docs/WINDOWS-VALIDATION.md.\n");
             log.AppendText($"RESULT {passed} passed, {failed} failed.\nNot a test of physical typing, other applications, elevation, IME, or monitor positioning.\n");
             var path=Path.Combine(Path.GetTempPath(),"Comet-Windows-smoke-results.txt");File.WriteAllText(path,log.Text);log.AppendText("Saved "+path+Environment.NewLine);button.IsEnabled=true;
         };

@@ -1,0 +1,5 @@
+Original 0.1 full-Backspace then :heart: query= (expected heart)
+Original 0.1 :heart top result: 🫀 / anatomical_heart (expected ❤️ / heart)
+Original ordinary parser reset/rearm cycles: 100/100 (no Windows APIs exercised)
+Confirmed portable baseline defects reproduced: True
+The user's native one-use hook failure is NOT reproduced by this proof and remains unverified.

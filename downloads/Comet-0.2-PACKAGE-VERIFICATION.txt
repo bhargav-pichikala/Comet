@@ -1,0 +1,18 @@
+Comet 0.2 package verification
+84 portable tests passed. Native Windows execution NOT VERIFIED.
+Original 0.1 ZIPs preserved unchanged. Windows x64 main app and 100-cycle test runner published self-contained.
+
+[
+  {
+    "file": "Comet-0.2-win-x64.zip",
+    "bytes": 70071268,
+    "sha256": "88467a19d521caa58e2a096ec32f6d3e67e9a41ae3991eb5aa1fbf39becc803a",
+    "zip_integrity": "passed"
+  },
+  {
+    "file": "Comet-0.2-source.zip",
+    "bytes": 203035,
+    "sha256": "674ea2bbcba97ba5fca836cb9ef7c01ebb2676d80fe04cb7c8acca355fed715c",
+    "zip_integrity": "passed"
+  }
+]

@@ -1,17 +1,17 @@
 # Feature parity audit
 
-2026-11-08. Original macOS app was **not executed**. “Static” below means bundle metadata, resources, strings or SQL support the finding; it does not establish observed runtime behavior. No source app license was bypassed. Comet is not feature-complete or production-verified.
+Comet 0.2 · 2026-11-08. Original macOS app was **not executed**. “Static” below means bundle metadata, resources, strings or SQL support the finding; it does not establish observed runtime behavior. No source app license was bypassed. Comet is not feature-complete or production-verified.
 
-Status meanings: COMPLETE = implemented and portable behavior tested; PARTIAL = implemented with material scope limits; NOT IMPLEMENTED = absent; NOT VERIFIED = code exists but native runtime evidence is unavailable. Test status uses the same four labels. No Windows interaction is marked COMPLETE.
+Status meanings: COMPLETE = implemented and portable behavior tested; PARTIAL = implemented with material scope limits; NOT IMPLEMENTED = absent; NOT VERIFIED = code exists but native runtime evidence is unavailable. Test status uses the same four labels. No Windows interaction is marked COMPLETE. See BUG-INVESTIGATION-0.2.md and VISUAL-COMPARISON-0.2.md for verified changes versus unverified native causes.
 
 | Feature | Rocket macOS evidence | Comet Windows behavior | Implementation status | Test status | Known limitations |
 |---|---|---|---|---|---|
-| Global autocomplete | Static event-tap and typeahead components; `:roc` demo | Global hook, bounded parser, async search, suggestions | PARTIAL | PARTIAL | Core parser/search passed; actual hook and app coverage unverified |
+| Global autocomplete | Static event-tap and typeahead components; `:roc` demo | Dedicated input pump, revision-owned session, bounded parser, async search, visible suggestions | PARTIAL | PARTIAL | 84 portable tests, including 100-cycle session regressions; actual hook and app coverage unverified |
 | Trigger customization | Static trigger and double-trigger controls | ASCII punctuation, single/double trigger, min query | COMPLETE | COMPLETE | ASCII shortcodes only; UI itself unverified |
-| Native floating popup | Static typeahead NIBs | Noactivate topmost compact rows, names, selection | NOT VERIFIED | NOT VERIFIED | No Windows screenshots/runtime observation |
+| Native floating popup | Static typeahead NIBs | Noactivate topmost compact rows, names, selection | NOT VERIFIED | NOT VERIFIED | Reference-style redesign; native render/export not executed |
 | Enter/Tab/arrows/Escape | Static demo documents Return/Tab | Cached selection, wrapping navigation, optional Tab, dismissal | PARTIAL | PARTIAL | Portable navigation tested; hook suppression unverified |
 | Mouse selection | Typeahead row resources | Click to confirm without activation | NOT VERIFIED | NOT VERIFIED | Native focus behavior unverified |
-| Caret positioning | Runtime not observed | Win32 caret anchor, mouse fallback, work-area clamp | NOT VERIFIED | NOT VERIFIED | UIA caret-only controls fall back to mouse |
+| Caret positioning | Runtime not observed | Win32/UIA/MSAA caret anchor, no pointer fallback, work-area clamp/flip | NOT VERIFIED | NOT VERIFIED | No reliable caret → inline popup stays hidden; use explicit picker |
 | Multi-monitor / DPI | Runtime not observed | Per-monitor manifest and monitor work-area placement | NOT VERIFIED | NOT VERIFIED | Mixed scaling needs native tests |
 | Exact shortcode replacement | Static pasteboard/CGEvent symbols | Verify preceding range, then batched deletion/Unicode input | PARTIAL | PARTIAL | Planning tested; provider support and narrow cross-process race remain |
 | Unicode / ZWJ / selectors | Static Unicode variant resources | Full UTF-16 sequences preserved | PARTIAL | PARTIAL | Data and planning tested; app rendering/injection unverified |

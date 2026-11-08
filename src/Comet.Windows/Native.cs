@@ -30,12 +30,14 @@ internal static class Native
     [DllImport("user32.dll", SetLastError=true)] internal static extern uint SendInput(uint count, Input[] input, int size);
     [DllImport("user32.dll")] internal static extern bool ClientToScreen(nint hwnd, ref Point point);
     [DllImport("user32.dll")] internal static extern bool GetCursorPos(out Point point);
+    [DllImport("user32.dll")] internal static extern bool SetCursorPos(int x, int y);
     [DllImport("user32.dll")] internal static extern nint MonitorFromPoint(Point point, uint flags);
     [DllImport("user32.dll", CharSet=CharSet.Unicode)] internal static extern bool GetMonitorInfo(nint monitor, ref MonitorInfo info);
     [DllImport("user32.dll", EntryPoint="GetWindowLongPtrW")] internal static extern nint GetWindowLongPtr(nint hwnd, int index);
     [DllImport("user32.dll", EntryPoint="SetWindowLongPtrW")] internal static extern nint SetWindowLongPtr(nint hwnd, int index, nint value);
     [DllImport("user32.dll")] internal static extern bool SetWindowPos(nint hwnd,nint after,int x,int y,int cx,int cy,uint flags);
     [DllImport("user32.dll")] internal static extern uint GetDpiForWindow(nint hwnd);
+    [DllImport("shcore.dll")] internal static extern int GetDpiForMonitor(nint monitor, int type, out uint x, out uint y);
     [DllImport("user32.dll")] internal static extern bool RegisterHotKey(nint hwnd,int id,uint mods,uint key);
     [DllImport("user32.dll")] internal static extern bool UnregisterHotKey(nint hwnd,int id);
     [DllImport("imm32.dll")] internal static extern nint ImmGetContext(nint hwnd);

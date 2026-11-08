@@ -1,0 +1,87 @@
+Dataset: 3949 entries; index construction 180 ms
+PASS Parser recognizes a shortcode
+PASS Ordinary text never buffered
+PASS Trigger requires word boundary
+PASS Whitespace permits trigger
+PASS Opening punctuation permits trigger
+PASS Custom trigger
+PASS Double trigger
+PASS Incomplete double trigger has no query
+PASS Backspace edits candidate
+PASS Backspace removes trigger
+PASS Movement reset invalidates revision
+PASS Whitespace cancels candidate
+PASS Non-ASCII typing cancels candidate
+PASS Candidate length is bounded
+PASS Rapid repeated shortcode parsing
+PASS Exact emoji search
+PASS Partial emoji search
+PASS Case insensitive search
+PASS Fuzzy edit distance
+PASS Fuzzy can be disabled
+PASS Aliases match
+PASS Dataset has gender and ZWJ sequences
+PASS Dataset has variation selectors
+PASS Tone preference selects variation
+PASS Custom emoji takes precedence
+PASS Multiline snippet expansion
+PASS Duplicate shortcuts rejected ignoring case
+PASS Invalid shortcut rejected
+PASS Empty snippet rejected
+PASS Unsafe replacement candidate rejected
+PASS Replacement preserves surrounding text
+PASS ZWJ replacement preserves UTF16 sequence
+PASS Replacement requires a query
+PASS Replacement caret bounds
+PASS Keyboard navigation wraps
+PASS Executable exclusions exact match
+PASS Exclusion normalization
+PASS Settings roundtrip preserves Unicode and newlines
+PASS Corrupt settings rejected
+PASS Unknown settings version rejected
+PASS Invalid trigger rejected
+PASS Invalid popup count rejected
+PASS Recent items capped and deduplicated
+PASS Favorites filter
+PASS Recent ordering
+PASS Category filter
+PASS Search cache invalidation
+PASS Random surrounding text is preserved
+PASS Win32 INPUT x64 ABI layout
+PASS Win32 GUI thread info x64 ABI layout
+PASS Snippet variable deterministic expansion
+PASS Unknown snippet variables preserved
+PASS Snippet ISO timestamp retains offset
+PASS 100 consecutive sessions replace rocket, heart, fire without restart
+PASS Completion never erases the next shortcut
+PASS Stale completion cannot clear a newer insertion
+PASS 100 cancellations and failed insertions recover
+PASS Old search results cannot overwrite a newer query
+PASS Results from a completed session cannot reopen the popup
+PASS Invisible suggestions cannot intercept confirmation
+PASS Search-more row participates in keyboard navigation
+PASS Cancelled session still swallows the matching key-up
+PASS Physical confirm autorepeat remains suppressed until release
+PASS Own injected events are ignored even in test mode
+PASS External injected events require explicit test mode
+PASS Physical keystrokes pass injection filter
+PASS Stale visibility acknowledgement cannot activate new query
+PASS Search-more replacement preserves original candidate range
+PASS Caret placement flips above the bottom screen edge
+PASS Caret placement stays on a negative-coordinate monitor
+PASS Right-edge caret placement clamps and keeps pointer on card
+PASS Geometry respects multiple DPI scales
+PASS Missing caret geometry is rejected rather than using mouse
+PASS Popup clamps to top edge on tiny work areas
+PASS Exact heart shortcode outranks other heart keyword matches
+PASS Search cache cannot leak custom aliases between settings instances
+PASS Exact built-in name outranks a longer custom prefix
+PASS Native and core injection markers agree
+PASS Erase entire shortcut then immediately type next trigger
+PASS 100 rapid popup reopens cancel old fades and restore opacity
+PASS Completed popup dismissal may hide only its own epoch
+PASS Explicit read-only value provider cannot be overridden by text fallback
+PASS Unknown or read-only text metadata fails closed
+PASS Explicit writable value or text metadata allows editing
+Uncached search: median 0.90 ms, max 3.65 ms. Process working set 154 MB (Linux test runner, not Windows app).
+RESULT 84 passed, 0 failed

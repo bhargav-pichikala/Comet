@@ -28,7 +28,7 @@ public sealed class ShortcutParser
     public void Backspace()
     {
         Revision++;
-        if (Active) Candidate = Candidate[..^1];
+        if (Active) { Candidate = Candidate[..^1]; if(Candidate.Length==0)boundary=true; }
         else boundary = false;
     }
     public string Query(string prefix) => Candidate.StartsWith(prefix, StringComparison.Ordinal) ? Candidate[prefix.Length..] : "";
